@@ -1,0 +1,14 @@
+{
+  "name": "@blackroad-os/sites",
+  "version": "1.0.0",
+  "description": "BlackRoad OS static sites — offline-first, sovereign, privacy-respecting",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js",
+    "build": "node build.js",
+    "validate": "node validate.js"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "author": "BlackRoad OS, Inc."
+}
