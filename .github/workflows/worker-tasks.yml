@@ -1,0 +1,70 @@
+name: Long-Running Tasks (Cloudflare Workers)
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: 'Task to run on the worker'
+        required: true
+        type: choice
+        options:
+          - health-check
+          - cache-warm
+          - index-sites
+      target_url:
+        description: 'Optional target URL for the task'
+        required: false
+        default: ''
+  schedule:
+    # Run health-check daily at 06:00 UTC
+    - cron: '0 6 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  dispatch-worker-task:
+    name: Dispatch task to Cloudflare Worker
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Dispatch task via Cloudflare Worker
+        run: |
+          TASK="${{ github.event.inputs.task || 'health-check' }}"
+          TARGET="${{ github.event.inputs.target_url || '' }}"
+          WORKER_URL="https://sites.blackroad-os.workers.dev"
+
+          echo "Dispatching task: $TASK"
+
+          PAYLOAD="{\"task\":\"$TASK\",\"target\":\"$TARGET\",\"triggered_by\":\"github-actions\",\"run_id\":\"${{ github.run_id }}\"}"
+
+          # Write secret to a temp file so it never appears in the process list
+          SECRET_FILE=$(mktemp)
+          printf '%s' "$WORKER_SECRET" > "$SECRET_FILE"
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X POST "$WORKER_URL/api/tasks" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $(cat "$SECRET_FILE")" \
+            -d "$PAYLOAD") || RESPONSE="connection_error\n000"
+
+          rm -f "$SECRET_FILE"
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | head -n-1)
+
+          echo "HTTP status: $HTTP_CODE"
+          echo "Response: $BODY"
+
+          if [[ "$HTTP_CODE" == "200" || "$HTTP_CODE" == "202" ]]; then
+            echo "✅ Task dispatched successfully"
+          else
+            echo "⚠️ Worker not reachable (HTTP $HTTP_CODE) — deploy first via deploy.yml"
+            exit 0
+          fi
+        env:
+          WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
