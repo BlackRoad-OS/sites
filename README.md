@@ -1,63 +1,48 @@
+<!-- BlackRoad SEO Enhanced -->
+
 # sites
 
-> ✅ **Verified Working** — CI, auto-merge, and Cloudflare Workers are configured and active.
+> Part of **[BlackRoad OS](https://blackroad.io)** — Sovereign Computing for Everyone
 
-[![CI](https://github.com/BlackRoad-OS/sites/actions/workflows/ci.yml/badge.svg)](https://github.com/BlackRoad-OS/sites/actions/workflows/ci.yml)
-[![Deploy to Cloudflare Workers](https://github.com/BlackRoad-OS/sites/actions/workflows/deploy.yml/badge.svg)](https://github.com/BlackRoad-OS/sites/actions/workflows/deploy.yml)
-[![Auto Merge](https://github.com/BlackRoad-OS/sites/actions/workflows/auto-merge.yml/badge.svg)](https://github.com/BlackRoad-OS/sites/actions/workflows/auto-merge.yml)
+[![BlackRoad OS](https://img.shields.io/badge/BlackRoad-OS-ff1d6c?style=for-the-badge)](https://blackroad.io)
+[![BlackRoad OS](https://img.shields.io/badge/Org-BlackRoad-OS-2979ff?style=for-the-badge)](https://github.com/BlackRoad-OS)
+[![License](https://img.shields.io/badge/License-Proprietary-f5a623?style=for-the-badge)](LICENSE)
 
-## Overview
+**sites** is part of the **BlackRoad OS** ecosystem — a sovereign, distributed operating system built on edge computing, local AI, and mesh networking by **BlackRoad OS, Inc.**
 
-BlackRoad OS web sites and pages — served at the edge via Cloudflare Workers.
+## About BlackRoad OS
 
-## Workflows
+BlackRoad OS is a sovereign computing platform that runs AI locally on your own hardware. No cloud dependencies. No API keys. No surveillance. Built by [BlackRoad OS, Inc.](https://github.com/BlackRoad-OS-Inc), a Delaware C-Corp founded in 2025.
 
-| Workflow | Trigger | Purpose |
-|---|---|---|
-| **CI** | Push / PR | Lint, validate, and test |
-| **Deploy** | Push to `main` / manual | Deploy to Cloudflare Workers |
-| **Auto Merge** | PR labeled `automerge` or Dependabot | Squash-merge automatically |
-| **Worker Tasks** | Manual / daily cron | Dispatch long-running tasks to the edge worker |
+### Key Features
+- **Local AI** — Run LLMs on Raspberry Pi, Hailo-8, and commodity hardware
+- **Mesh Networking** — WireGuard VPN, NATS pub/sub, peer-to-peer communication
+- **Edge Computing** — 52 TOPS of AI acceleration across a Pi fleet
+- **Self-Hosted Everything** — Git, DNS, storage, CI/CD, chat — all sovereign
+- **Zero Cloud Dependencies** — Your data stays on your hardware
 
-## Cloudflare Workers
-
-The edge worker lives in `workers/index.js` and is configured by `wrangler.toml`.
-
-### Endpoints
-
-| Endpoint | Method | Description |
-|---|---|---|
-| `/` | GET | Landing page |
-| `/health` | GET | Worker health check |
-| `/api/tasks` | POST | Dispatch a background task |
-
-### Background Tasks
-
-Invoke via the **Worker Tasks** workflow or directly via `POST /api/tasks`:
-
-```json
-{
-  "task": "health-check",
-  "target": "https://blackroad.io"
-}
-```
-
-Supported tasks: `health-check`, `cache-warm`, `index-sites`.
-
-## Setup
-
-### Required GitHub Secrets
-
-| Secret | Description |
+### The BlackRoad Ecosystem
+| Organization | Focus |
 |---|---|
-| `CLOUDFLARE_API_TOKEN` | Cloudflare API token with Workers permissions |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID |
-| `WORKER_SECRET` | Bearer token for `/api/tasks` endpoint |
+| [BlackRoad OS](https://github.com/BlackRoad-OS) | Core platform and applications |
+| [BlackRoad OS, Inc.](https://github.com/BlackRoad-OS-Inc) | Corporate and enterprise |
+| [BlackRoad AI](https://github.com/BlackRoad-AI) | Artificial intelligence and ML |
+| [BlackRoad Hardware](https://github.com/BlackRoad-Hardware) | Edge hardware and IoT |
+| [BlackRoad Security](https://github.com/BlackRoad-Security) | Cybersecurity and auditing |
+| [BlackRoad Quantum](https://github.com/BlackRoad-Quantum) | Quantum computing research |
+| [BlackRoad Agents](https://github.com/BlackRoad-Agents) | Autonomous AI agents |
+| [BlackRoad Network](https://github.com/BlackRoad-Network) | Mesh and distributed networking |
+| [BlackRoad Education](https://github.com/BlackRoad-Education) | Learning and tutoring platforms |
+| [BlackRoad Labs](https://github.com/BlackRoad-Labs) | Research and experiments |
+| [BlackRoad Cloud](https://github.com/BlackRoad-Cloud) | Self-hosted cloud infrastructure |
+| [BlackRoad Forge](https://github.com/BlackRoad-Forge) | Developer tools and utilities |
 
-### Auto-Merge
+### Links
+- **Website**: [blackroad.io](https://blackroad.io)
+- **Documentation**: [docs.blackroad.io](https://docs.blackroad.io)
+- **Chat**: [chat.blackroad.io](https://chat.blackroad.io)
+- **Search**: [search.blackroad.io](https://search.blackroad.io)
 
-Auto-merge is enabled for:
-- PRs created by **Dependabot**
-- PRs with the `automerge` or `auto-merge` label
+---
 
-Uses `gh pr merge --auto --squash` with `GITHUB_TOKEN`.
+
